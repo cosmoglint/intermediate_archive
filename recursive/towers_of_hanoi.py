@@ -5,11 +5,8 @@
 def hanoi(n,start,end):
     other = 6-(start+end)
     if (n == 1):
+        # print(start,"to",end)
         return 1
-    # elif (n == 2):
-    #     return 2
-    # elif (n==3):
-    #     return 7
     else:
         return 1 + hanoi(n-1,start,other) + hanoi(n-1,other,end)
 
