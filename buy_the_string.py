@@ -5,5 +5,28 @@
 n = int(input())
 
 for i in range(n):
-    x, c0, c1, h = list(map(int,input()))
+    x, c0, c1, h = list(map(int,input().split()))
     thes = input()
+    binn = int(thes,2)
+    oners = 2**x
+    oc = oners & binn
+    zc = ~oc
+    print(min())
+    print(binn)
+
+
+'''
+6
+3 1 1 1
+100
+5 10 100 1
+01010
+5 10 1 1
+11111
+5 1 10 1
+11111
+12 2 1 10
+101110110101
+2 100 1 10
+00
+'''
