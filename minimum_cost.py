@@ -9,24 +9,21 @@ import functools
 n = int(input())
 
 for i in range(n):
-    length , i1 , i0 = list(map(int,input().split()))
+    length , i1 , i2 = list(map(int,input().split()))
     binar  = list(map(int,input().split()))
-
-    val = 1
-    ls1 = ""
-    ls2 = ""
+    print(binar)
     val1 = 0
     val2 = 0
-    for x in range(n):
-        if (x%2):
-            val1 += (i1) if (binar[x] ^ 0) else 0
-            val2 += (i2) if (binar[x] ^ 1) else 0
+    for x in range(length):
+        if (x%2 == 0):
+            val1 +=  0 if (binar[x] == 1) else (i1)
+            val2 +=  0 if (binar[x] == 0) else (i2)
         else:
-            val1 += (i1) if (binar[x] ^ 1) else 0
-            val2 += (i2) if (binar[x] ^ 0) else 0
+            val1 += 0 if (binar[x] == 0) else (i2)
+            val2 +=  0 if (binar[x] == 1) else (i1)
 
 
-    print(val1,val2)
+    print(min(val1,val2))
 
 
 
