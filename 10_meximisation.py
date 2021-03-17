@@ -1,3 +1,5 @@
+#  https://m1.codeforces.com/contest/1497/problem/A
+
 
 def meximize(lst):
     myset = sorted(list(set(lst)))

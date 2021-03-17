@@ -1,3 +1,6 @@
+# https://m1.codeforces.com/contest/1497/problem/E1
+
+
 
 import math
 
