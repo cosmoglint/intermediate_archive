@@ -1,4 +1,4 @@
-
+# given a number of blocks of white and black, find if w white dominoes and b black dominoes can be placed
 
 
 def test_domino(first,second):

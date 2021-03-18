@@ -1,4 +1,4 @@
-
+# given a string of 0s and 1s remove a set of elements such that the remaining string is in ascending order
 
 
 def test_ascending(mystr):
@@ -19,4 +19,3 @@ for i in range(t):
     flag = True
 
     while flag == True:
-        
