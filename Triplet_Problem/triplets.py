@@ -68,3 +68,25 @@ if __name__ == '__main__':
     ans = countTriplets(arr, r)
 
     print(ans)
+
+
+def countTriplets(arr, r):
+        count = 0
+        dict = {}
+        dictPairs = {}
+
+        for i in reversed(arr):
+                if i*r in dictPairs:
+                        count += dictPairs[i*r]
+                if i*r in dict:
+                        dictPairs[i] = dictPairs.get(i, 0) + dict[i*r]
+
+                dict[i] = dict.get(i, 0) + 1
+
+        return count
+
+
+
+
+# 5 2
+# 4 2 1 4 2 4 4 4 4
