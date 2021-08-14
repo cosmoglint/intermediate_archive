@@ -29,7 +29,7 @@ def freqQuery(queries):
 
             frequency[numbers[a]] -= 1
             numbers[a] -= 1
-            frequency[numbers[a]] = 1
+            frequency[numbers[a]] += 1
 
         if x == 3:
             if a in frequency.keys() and frequency[a] > 0:
