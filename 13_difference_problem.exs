@@ -38,3 +38,30 @@ defmodule Solution do
     calc_target(numbers, target, 1, mymap)
   end
 end
+
+
+defmodule TwoPointerSolution do
+  @spec two_sum(numbers :: [integer], target :: integer) :: [integer]
+  def calc_target(nums, target, iter1, iter2) do
+    val1 = Enum.at(nums, 0)
+    val2 = Enum.at(nums, -1)
+
+    cond do
+      val1 + val2 == target ->
+        [iter1, iter2]
+
+      val2 + val1 > target ->
+        calc_target(Enum.slice(nums, 0..-2), target, iter1, iter2 - 1)
+
+      val2 + val1 < target ->
+        calc_target(Enum.slice(nums, 1..-1), target, iter1 + 1, iter2)
+
+      true ->
+        false
+    end
+  end
+
+  def two_sum(numbers, target) do
+    calc_target(numbers, target, 1, Enum.count(numbers))
+  end
+end
