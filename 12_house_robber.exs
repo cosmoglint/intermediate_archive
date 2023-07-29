@@ -5,24 +5,33 @@
 
 defmodule Solution do
   @spec rob(nums :: [integer]) :: integer
-  def do_rob(houses_left) do
-    houses = Enum.count(houses_left)
+  def do_rob(houses_left, memomap) do
+    houses_left_count = Enum.count(houses_left)
 
     cond do
-      houses == 0 ->
-        0
+      is_map_key(memomap, houses_left_count) ->
+        {memomap[houses_left_count], memomap}
 
       true ->
         # calculate the max for robbing current house and leaving the next house vs
         # leaving the current house and proceeding forward
-        max(
-          do_rob(Enum.slice(houses_left, 1..-1)),
-          Enum.at(houses_left, 0) + do_rob(Enum.slice(houses_left, 2..-1))
-        )
+        {rob_cur, curmap} = do_rob(Enum.slice(houses_left, 1..-1), memomap)
+        {leave_cur, curmap} = do_rob(Enum.slice(houses_left, 2..-1), curmap)
+
+        max_robbable =
+          max(
+            rob_cur,
+            Enum.at(houses_left, 0) + leave_cur
+          )
+
+        curmap = Map.put(curmap, houses_left_count, max_robbable)
+
+        {max_robbable, curmap}
     end
   end
 
   def rob(nums) do
-    do_rob(nums)
+    {ans, _} = do_rob(nums, %{0 => 0})
+    ans
   end
 end
