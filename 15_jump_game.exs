@@ -37,24 +37,42 @@ defmodule Solution do
   end
 
   def short_jump(nums, current, jumper, memomap) when jumper == current do
-    memojump(Enum.slice(nums, current..-1), memomap)
+    {jumpres, jumpmap} = memojump(Enum.slice(nums, current..-1), memomap)
   end
 
   def short_jump(nums, current, jumper, memomap) do
-    custom_min(
-      memojump(Enum.slice(nums, current..-1), memomap),
-      short_jump(nums, current + 1, jumper, memomap)
-    )
+    resnums = Enum.slice(nums, current..-1)
+    {jumpres, jumpmap} = memojump(resnums, memomap)
+
+    # jumpmap =
+    #   Map.put(
+    #     memomap,
+    #     Enum.slice(nums, current..-1),
+    #     jumpres
+    #   )
+
+    {shjumpres, shjumpmap} = short_jump(nums, current + 1, jumper, jumpmap)
+
+    minval =
+      custom_min(
+        jumpres,
+        shjumpres
+      )
+
+    {minval, shjumpmap}
   end
 
-  def memojump([_], memomap) do
-    0
+  def memojump([a], memomap) do
+    {0, Map.put(memomap, [a], 0)}
   end
 
   def memojump(nums, memomap) do
+    # IO.inspect(nums)
+    # IO.inspect(memomap)
     cond do
       Map.has_key?(memomap, nums) ->
-        nil
+        IO.puts("map has key")
+        Map.get(memomap, nums)
 
       true ->
         jumper = Enum.at(nums, 0)
@@ -66,15 +84,18 @@ defmodule Solution do
           nums_len > jumper + 1 ->
             case jumper do
               0 ->
-                :infinity
+
+                {:infinity, Map.put(memomap, nums, :infinity)}
 
               _ ->
                 # rest_nums = Enum.slice(nums, 1..-1)
                 # jumpable_slice = Enum.slice(nums, 1..jumper)
+                {short_jumpres, short_jumpmap} = short_jump(nums, 1, jumper, memomap)
+
                 shortest =
                   custom_add(
                     1,
-                    short_jump(nums, 1, jumper, memomap)
+                    short_jumpres
                     # custom_min(
                     #   memojump(Enum.slice(nums, 1..-1), memomap),
                     #   memojump(Enum.slice(nums, jumper..-1), memomap)
@@ -82,19 +103,19 @@ defmodule Solution do
                   )
 
                 # IO.inspect(shortest)
-                shortest
 
-                # Map.put(memomap, nums, shortest)
+                {shortest, Map.put(memomap, nums, shortest)}
             end
 
           true ->
             # IO.puts("returning a 1")
-            1
+            {1, Map.put(memomap, nums, 1)}
         end
     end
   end
 
   def jump(nums) do
-    memojump(nums, %{})
+    {ans, resmap} = memojump(nums, %{})
+    ans
   end
 end
