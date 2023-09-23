@@ -8,23 +8,23 @@
 
 defmodule Solution do
   @spec minimum_total(triangle :: [[integer]]) :: integer
-  def next_step(path_sum, width, level, triangle) do
-    current_row = Enum.at(triangle, level)
-    val = Enum.at(current_row, width)
-    new_sum = val + path_sum
-    next_row = Enum.at(triangle, level+1)
+  def next_step(width, level, triangle) do
+      current_row = Enum.at(triangle, level)
+      val = Enum.at(current_row, width)
+      next_row = Enum.at(triangle, level+1)
       case next_row do
         nil ->
-          new_sum
+          val
         _ ->
-          left_step = next_step(new_sum, width, level+1, triangle)
-          right_step = next_step(new_sum, width+1, level+1, triangle)
-          min(left_step, right_step)
-
+          left_step = next_step(width, level+1, triangle)
+          right_step = next_step(width+1, level+1, triangle)
+          endval = min(left_step, right_step)
+          val + endval
     end
   end
 
   def minimum_total(triangle) do
-    next_step(0, 0, 0, triangle)
+    ans = next_step(0, 0, triangle)
+    ans
   end
 end
