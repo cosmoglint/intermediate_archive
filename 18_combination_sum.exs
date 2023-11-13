@@ -43,14 +43,15 @@ defmodule Solution do
   end
 
   def combinate(og_list, elem) do
-    IO.inspect(og_list)
-    IO.inspect(elem)
-
-    Enum.map(og_list, fn x ->
+    Enum.flat_map(og_list, fn x ->
       Enum.map(elem, fn y ->
         x ++ y
       end)
     end)
+  end
+
+  def map_calculator(map, _, res) when map == %{} do
+    res
   end
 
   def map_calculator(map, target, res) do
@@ -59,12 +60,13 @@ defmodule Solution do
 
     cond do
       Map.has_key?(map, target - felem) ->
-        res ++ combinate(Map.get(map, felem), Map.get(map, target - felem))
-        nmap = Map.delete(map, [felem, target - felem])
+        res = res ++ combinate(Map.get(map, felem), Map.get(map, target - felem))
+        nmap = Map.drop(map, [felem, target - felem])
         map_calculator(nmap, target, res)
 
       true ->
-        res
+        nmap = Map.delete(map, felem)
+        map_calculator(nmap, target, res)
     end
   end
 
@@ -72,7 +74,7 @@ defmodule Solution do
     new_map = Enum.reduce(candidate_list, %{target: target}, &add_to_map/2)
     new_map = Map.drop(new_map, [:target, :curval])
 
-    IO.inspect(new_map)
+    map_calculator(new_map, target, [])
 
     # cal_list =
     #   Enum.map(new_map, fn {k, v} ->
@@ -93,6 +95,6 @@ defmodule Solution do
   end
 end
 
-IO.inspect(Solution.combination_sum([1, 2, 3, 4], 9))
+# IO.inspect(Solution.combination_sum([1, 2, 3, 4], 9))
 
 # IO.inspect(Solution.combinate([[1, 2, 3, 4], [6, 8, 9, 0]], [[11, 22, 33, 44], [22, 44, 55, 66]]))
