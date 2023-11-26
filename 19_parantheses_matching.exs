@@ -12,55 +12,46 @@ defmodule Solution do
   end
 
   def top_stack([]) do
-    nil
+    0
   end
 
   def top_stack(stack) do
     Enum.at(stack, -1)
   end
 
-  def traverse_parantheses("", _, count, max) do
-    max = if count > max, do: count, else: max
+  def traverse_parantheses("", _, max, index) do
+    max
   end
 
-  def traverse_parantheses(par_str, curr_stack, count, max, rev) do
+  def traverse_parantheses(par_str, curr_stack, max, index) do
     curr_value = String.at(par_str, 0)
     cut_str = String.slice(par_str, 1..-1)
-    top_value = top_stack(curr_stack)
+    IO.inspect(curr_stack)
+    IO.inspect(index)
 
     cond do
-      curr_value == "" ->
-        0
-
       curr_value == "(" ->
-        cond do
-          top_value == "(" ->
-            new_stack = curr_stack ++ ["("]
-            traverse_parantheses(cut_str, curr_stack, count, max, rev)
-
-          top_value == ")" ->
-            rev = 0
-            traverse_parantheses(cut_str, curr_stack, count, max, rev)
-        end
+        new_stack = curr_stack ++ [index]
+        traverse_parantheses(cut_str, new_stack, max, index + 1)
 
       curr_value == ")" ->
+        new_stack = Enum.slice(curr_stack, 0..-2)
+
         cond do
-          top_value == nil ->
-            max = if count > max, do: count, else: max
-            traverse_parantheses(cut_str, [], 0, max, rev)
+          new_stack == [] ->
+            new_stack = new_stack ++ [index]
+            traverse_parantheses(cut_str, new_stack, max, index + 1)
 
-          top_value == "(" ->
-            new_stack = Enum.slice(curr_stack, 0..-2)
-            traverse_parantheses(cut_str, new_stack, count + 2, max, rev + 2)
-
-          top_value == ")" ->
-            new_stack = curr_stack ++ [")"]
-            traverse_parantheses(cut_str, new_stack, count, max, rev)
+          true ->
+            top_value = top_stack(new_stack)
+            diff = index - top_value
+            max = if diff > max, do: diff, else: max
+            traverse_parantheses(cut_str, new_stack, max, index + 1)
         end
     end
   end
 
   def longest_valid_parentheses(s) do
-    traverse_parantheses(s, [], 0, 0)
+    traverse_parantheses(s, [0], 0, 1)
   end
 end
