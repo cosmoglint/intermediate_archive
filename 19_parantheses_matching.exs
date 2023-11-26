@@ -19,8 +19,17 @@ defmodule Solution do
     Enum.at(stack, -1)
   end
 
-  def traverse_parantheses("", _, count, max) do
-    max = if count > max, do: count, else: max
+  def traverse_parantheses("", _, count, max, rev) do
+    cond do
+      rev > max ->
+        rev
+
+      count > max ->
+        count
+
+      count <= max ->
+        max
+    end
   end
 
   def traverse_parantheses(par_str, curr_stack, count, max, rev) do
@@ -34,6 +43,9 @@ defmodule Solution do
 
       curr_value == "(" ->
         cond do
+          top_value == nil ->
+            traverse_parantheses(cut_str, [], 0, max, 0)
+
           top_value == "(" ->
             new_stack = curr_stack ++ ["("]
             traverse_parantheses(cut_str, curr_stack, count, max, rev)
@@ -47,7 +59,7 @@ defmodule Solution do
         cond do
           top_value == nil ->
             max = if count > max, do: count, else: max
-            traverse_parantheses(cut_str, [], 0, max, rev)
+            traverse_parantheses(cut_str, [], 0, max, 0)
 
           top_value == "(" ->
             new_stack = Enum.slice(curr_stack, 0..-2)
@@ -61,6 +73,6 @@ defmodule Solution do
   end
 
   def longest_valid_parentheses(s) do
-    traverse_parantheses(s, [], 0, 0)
+    traverse_parantheses(s, [], 0, 0, 0)
   end
 end
